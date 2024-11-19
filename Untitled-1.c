@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 // Définition de la structure Adresse
@@ -18,88 +17,146 @@ typedef struct {
     Adresse adresse;
 } Apprenant;
 
+// Nombre maximum d'apprenants
+#define MAX_APPRENANTS 10
+
+// Tableau d'apprenants fixe
+Apprenant apprenants[MAX_APPRENANTS];
+int compteur = 0; // Compteur d'apprenant actuel
+
 // Fonction pour créer un apprenant
-void creerApprenant(Apprenant* apprenant) {
+void creerApprenant() {
+    if (compteur >= MAX_APPRENANTS) {
+        printf("Capacité maximale atteinte pour les apprenants.\n");
+        return;
+    }
+    
     printf("Entrez le nom de l'apprenant: ");
-    fgets(apprenant->nom, sizeof(apprenant->nom), stdin);
-    apprenant->nom[strcspn(apprenant->nom, "\n")] = '\0';  // Suppression du \n à la fin
+    fgets(apprenants[compteur].nom, sizeof(apprenants[compteur].nom), stdin);
+    apprenants[compteur].nom[strcspn(apprenants[compteur].nom, "\n")] = '\0'; // Suppression du \n à la fin
 
     printf("Entrez le prénom de l'apprenant: ");
-    fgets(apprenant->prenom, sizeof(apprenant->prenom), stdin);
-    apprenant->prenom[strcspn(apprenant->prenom, "\n")] = '\0';
+    fgets(apprenants[compteur].prenom, sizeof(apprenants[compteur].prenom), stdin);
+    apprenants[compteur].prenom[strcspn(apprenants[compteur].prenom, "\n")] = '\0';
 
     printf("Entrez l'âge de l'apprenant: ");
-    scanf("%d", &apprenant->age);
+    scanf("%d", &apprenants[compteur].age);
     getchar(); // Pour consommer le '\n' restant
 
     printf("Entrez la note de l'apprenant: ");
-    scanf("%f", &apprenant->note);
-    getchar();
+    scanf("%f", &apprenants[compteur].note);
+    getchar(); // Pour consommer le '\n' restant
 
     printf("Entrez la rue de l'adresse: ");
-    fgets(apprenant->adresse.rue, sizeof(apprenant->adresse.rue), stdin);
-    apprenant->adresse.rue[strcspn(apprenant->adresse.rue, "\n")] = '\0';
+    fgets(apprenants[compteur].adresse.rue, sizeof(apprenants[compteur].adresse.rue), stdin);
+    apprenants[compteur].adresse.rue[strcspn(apprenants[compteur].adresse.rue, "\n")] = '\0';
 
     printf("Entrez la ville de l'adresse: ");
-    fgets(apprenant->adresse.ville, sizeof(apprenant->adresse.ville), stdin);
-    apprenant->adresse.ville[strcspn(apprenant->adresse.ville, "\n")] = '\0';
+    fgets(apprenants[compteur].adresse.ville, sizeof(apprenants[compteur].adresse.ville), stdin);
+    apprenants[compteur].adresse.ville[strcspn(apprenants[compteur].adresse.ville, "\n")] = '\0';
 
     printf("Entrez le code postal de l'adresse: ");
-    fgets(apprenant->adresse.codePostal, sizeof(apprenant->adresse.codePostal), stdin);
-    apprenant->adresse.codePostal[strcspn(apprenant->adresse.codePostal, "\n")] = '\0';
+    fgets(apprenants[compteur].adresse.codePostal, sizeof(apprenants[compteur].adresse.codePostal), stdin);
+    apprenants[compteur].adresse.codePostal[strcspn(apprenants[compteur].adresse.codePostal, "\n")] = '\0';
+
+    compteur++; // Incrémente le compteur d'apprenant
 }
 
 // Fonction pour afficher les informations d'un apprenant
-void afficherApprenant(Apprenant apprenant) {
-    printf("\nNom: %s\n", apprenant.nom);
-    printf("Prénom: %s\n", apprenant.prenom);
-    printf("Âge: %d\n", apprenant.age);
-    printf("Note: %.2f\n", apprenant.note);
-    printf("Adresse: %s, %s, %s\n\n", apprenant.adresse.rue, apprenant.adresse.ville, apprenant.adresse.codePostal);
+void afficherApprenant(int index) {
+    printf("\nNom: %s\n", apprenants[index].nom);
+    printf("Prénom: %s\n", apprenants[index].prenom);
+    printf("Âge: %d\n", apprenants[index].age);
+    printf("Note: %.2f\n", apprenants[index].note);
+    printf("Adresse: %s, %s, %s\n\n", apprenants[index].adresse.rue, apprenants[index].adresse.ville, apprenants[index].adresse.codePostal);
+}
+
+// Fonction pour afficher tous les apprenants
+void afficherTousLesApprenants() {
+    if (compteur == 0) {
+        printf("Aucun apprenant à afficher.\n");
+        return;
+    }
+
+    for (int i = 0; i < compteur; i++) {
+        afficherApprenant(i);
+    }
 }
 
 // Fonction pour mettre à jour un apprenant
-void mettreAJourApprenant(Apprenant* apprenant) {
-    printf("Entrez les nouvelles informations pour l'apprenant %s %s:\n", apprenant->nom, apprenant->prenom);
-    printf("Entrez le nouveau nom: ");
-    fgets(apprenant->nom, sizeof(apprenant->nom), stdin);
-    apprenant->nom[strcspn(apprenant->nom, "\n")] = '\0';
+void mettreAJourApprenant() {
+    if (compteur == 0) {
+        printf("Aucun apprenant à mettre à jour.\n");
+        return;
+    }
 
-    printf("Entrez le nouveau prénom: ");
-    fgets(apprenant->prenom, sizeof(apprenant->prenom), stdin);
-    apprenant->prenom[strcspn(apprenant->prenom, "\n")] = '\0';
-
-    printf("Entrez le nouvel âge: ");
-    scanf("%d", &apprenant->age);
+    int index;
+    printf("Entrez l'indice de l'apprenant à mettre à jour (0 à %d): ", compteur - 1);
+    scanf("%d", &index);
     getchar(); // Consomme le '\n' restant
 
-    printf("Entrez la nouvelle note: ");
-    scanf("%f", &apprenant->note);
-    getchar();
+    if (index >= 0 && index < compteur) {
+        printf("Entrez le nouveau nom: ");
+        fgets(apprenants[index].nom, sizeof(apprenants[index].nom), stdin);
+        apprenants[index].nom[strcspn(apprenants[index].nom, "\n")] = '\0';
 
-    printf("Entrez la nouvelle rue: ");
-    fgets(apprenant->adresse.rue, sizeof(apprenant->adresse.rue), stdin);
-    apprenant->adresse.rue[strcspn(apprenant->adresse.rue, "\n")] = '\0';
+        printf("Entrez le nouveau prénom: ");
+        fgets(apprenants[index].prenom, sizeof(apprenants[index].prenom), stdin);
+        apprenants[index].prenom[strcspn(apprenants[index].prenom, "\n")] = '\0';
 
-    printf("Entrez la nouvelle ville: ");
-    fgets(apprenant->adresse.ville, sizeof(apprenant->adresse.ville), stdin);
-    apprenant->adresse.ville[strcspn(apprenant->adresse.ville, "\n")] = '\0';
+        printf("Entrez le nouvel âge: ");
+        scanf("%d", &apprenants[index].age);
+        getchar();
 
-    printf("Entrez le nouveau code postal: ");
-    fgets(apprenant->adresse.codePostal, sizeof(apprenant->adresse.codePostal), stdin);
-    apprenant->adresse.codePostal[strcspn(apprenant->adresse.codePostal, "\n")] = '\0';
+        printf("Entrez la nouvelle note: ");
+        scanf("%f", &apprenants[index].note);
+        getchar();
+
+        printf("Entrez la nouvelle rue: ");
+        fgets(apprenants[index].adresse.rue, sizeof(apprenants[index].adresse.rue), stdin);
+        apprenants[index].adresse.rue[strcspn(apprenants[index].adresse.rue, "\n")] = '\0';
+
+        printf("Entrez la nouvelle ville: ");
+        fgets(apprenants[index].adresse.ville, sizeof(apprenants[index].adresse.ville), stdin);
+        apprenants[index].adresse.ville[strcspn(apprenants[index].adresse.ville, "\n")] = '\0';
+
+        printf("Entrez le nouveau code postal: ");
+        fgets(apprenants[index].adresse.codePostal, sizeof(apprenants[index].adresse.codePostal), stdin);
+        apprenants[index].adresse.codePostal[strcspn(apprenants[index].adresse.codePostal, "\n")] = '\0';
+    } else {
+        printf("Index invalide.\n");
+    }
 }
 
-// Fonction pour supprimer un apprenant (en le marquant comme supprimé dans la liste)
-void supprimerApprenant(Apprenant* apprenant) {
-    apprenant->nom[0] = '\0';  // Vide le nom, ce qui "supprime" l'apprenant
+// Fonction pour supprimer un apprenant
+void supprimerApprenant() {
+    if (compteur == 0) {
+        printf("Aucun apprenant à supprimer.\n");
+        return;
+    }
+
+    int index;
+    printf("Entrez l'indice de l'apprenant à supprimer (0 à %d): ", compteur - 1);
+    scanf("%d", &index);
+    getchar(); // Consomme le '\n' restant
+
+    if (index >= 0 && index < compteur) {
+        apprenants[index].nom[0] = '\0';  // Vide le nom pour marquer comme supprimé
+        printf("Apprenant supprimé.\n");
+
+        // Déplace les apprenants restants pour combler le vide
+        for (int i = index; i < compteur - 1; i++) {
+            apprenants[i] = apprenants[i + 1];
+        }
+        compteur--;  // Décrémenter le compteur
+    } else {
+        printf("Index invalide.\n");
+    }
 }
 
 // Menu principal
 int main() {
     int choix;
-    int compteur = 0;
-    Apprenant* apprenants = malloc(sizeof(Apprenant) * 10);  // Tableau dynamique pour 10 apprenants (pour commencer)
 
     while (1) {
         // Affichage du menu
@@ -114,59 +171,22 @@ int main() {
 
         switch (choix) {
             case 1:
-                if (compteur < 10) {
-                    creerApprenant(&apprenants[compteur]);
-                    compteur++;
-                } else {
-                    printf("Capacité maximale atteinte pour les apprenants.\n");
-                }
+                creerApprenant();
                 break;
 
             case 2:
-                if (compteur == 0) {
-                    printf("Aucun apprenant à afficher.\n");
-                } else {
-                    for (int i = 0; i < compteur; i++) {
-                        afficherApprenant(apprenants[i]);
-                    }
-                }
+                afficherTousLesApprenants();
                 break;
 
             case 3:
-                if (compteur == 0) {
-                    printf("Aucun apprenant à mettre à jour.\n");
-                } else {
-                    int index;
-                    printf("Entrez l'indice de l'apprenant à mettre à jour (0 à %d): ", compteur - 1);
-                    scanf("%d", &index);
-                    getchar(); // Consomme le '\n' restant
-                    if (index >= 0 && index < compteur) {
-                        mettreAJourApprenant(&apprenants[index]);
-                    } else {
-                        printf("Index invalide.\n");
-                    }
-                }
+                mettreAJourApprenant();
                 break;
 
             case 4:
-                if (compteur == 0) {
-                    printf("Aucun apprenant à supprimer.\n");
-                } else {
-                    int index;
-                    printf("Entrez l'indice de l'apprenant à supprimer (0 à %d): ", compteur - 1);
-                    scanf("%d", &index);
-                    getchar(); // Consomme le '\n' restant
-                    if (index >= 0 && index < compteur) {
-                        supprimerApprenant(&apprenants[index]);
-                        printf("Apprenant supprimé.\n");
-                    } else {
-                        printf("Index invalide.\n");
-                    }
-                }
+                supprimerApprenant();
                 break;
 
             case 5:
-                free(apprenants);  // Libère la mémoire allouée pour les apprenants
                 printf("Au revoir!\n");
                 return 0;
 

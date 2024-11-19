@@ -33,19 +33,18 @@ void creerApprenant() {
     
     printf("Entrez le nom de l'apprenant: ");
     fgets(apprenants[compteur].nom, sizeof(apprenants[compteur].nom), stdin);
-    apprenants[compteur].nom[strcspn(apprenants[compteur].nom, "\n")] = '\0'; // Suppression du \n à la fin
-
+    apprenants[compteur].nom[strcspn(apprenants[compteur].nom, "\n")] = '\0'; 
     printf("Entrez le prénom de l'apprenant: ");
     fgets(apprenants[compteur].prenom, sizeof(apprenants[compteur].prenom), stdin);
     apprenants[compteur].prenom[strcspn(apprenants[compteur].prenom, "\n")] = '\0';
 
     printf("Entrez l'âge de l'apprenant: ");
     scanf("%d", &apprenants[compteur].age);
-    getchar(); // Pour consommer le '\n' restant
+    getchar(); 
 
     printf("Entrez la note de l'apprenant: ");
     scanf("%f", &apprenants[compteur].note);
-    getchar(); // Pour consommer le '\n' restant
+    getchar(); 
 
     printf("Entrez la rue de l'adresse: ");
     fgets(apprenants[compteur].adresse.rue, sizeof(apprenants[compteur].adresse.rue), stdin);
@@ -59,7 +58,7 @@ void creerApprenant() {
     fgets(apprenants[compteur].adresse.codePostal, sizeof(apprenants[compteur].adresse.codePostal), stdin);
     apprenants[compteur].adresse.codePostal[strcspn(apprenants[compteur].adresse.codePostal, "\n")] = '\0';
 
-    compteur++; // Incrémente le compteur d'apprenant
+    compteur++; 
 }
 
 // Fonction pour afficher les informations d'un apprenant
@@ -138,7 +137,7 @@ void supprimerApprenant() {
     int index;
     printf("Entrez l'indice de l'apprenant à supprimer (0 à %d): ", compteur - 1);
     scanf("%d", &index);
-    getchar(); // Consomme le '\n' restant
+    getchar(); 
 
     if (index >= 0 && index < compteur) {
         apprenants[index].nom[0] = '\0';  // Vide le nom pour marquer comme supprimé
@@ -148,7 +147,7 @@ void supprimerApprenant() {
         for (int i = index; i < compteur - 1; i++) {
             apprenants[i] = apprenants[i + 1];
         }
-        compteur--;  // Décrémenter le compteur
+        compteur--;  
     } else {
         printf("Index invalide.\n");
     }
@@ -167,7 +166,7 @@ int main() {
         printf("5. Quitter\n");
         printf("Votre choix: ");
         scanf("%d", &choix);
-        getchar();  // Consomme le '\n' restant après la saisie du choix
+        getchar(); 
 
         switch (choix) {
             case 1:
